@@ -1,15 +1,15 @@
 import {Dimensions, View} from 'react-native';
 import {useState} from 'react';
 import {SafeAreaView, StyleSheet, TextInput} from 'react-native';
-import {Colors} from '@rneui/themed';
 import ColorPicker from 'react-native-wheel-color-picker';
 import {Button} from '@rneui/base';
 import {useNavigation} from '@react-navigation/native';
-import {addToData, storeData} from './StorageHelper';
-import FlashMessage, {showMessage} from 'react-native-flash-message';
+import {addToData} from './StorageHelper';
+import {showMessage} from 'react-native-flash-message';
 import * as React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 
-export default function NewDevice(device) {
+export default function NewDevice() {
   const navigation = useNavigation();
 
   const [text, onChangeText] = useState('Useless Text');

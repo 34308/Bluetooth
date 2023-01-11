@@ -4,10 +4,12 @@ import {useEffect, useState} from 'react';
 import {Card} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import {getData} from './StorageHelper';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function DeviceScreen() {
   const navigation = useNavigation();
   const [devices, setDevices] = useState([]);
+  SplashScreen.hide();
   useEffect(() => {
     async function loadData() {
       getData('key1').then(result => {

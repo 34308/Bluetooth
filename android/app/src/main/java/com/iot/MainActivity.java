@@ -3,7 +3,7 @@ package com.iot;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
-
+import org.devio.rn.splashscreen.SplashScreen;
 public class MainActivity extends ReactActivity {
 
   /**
@@ -29,7 +29,11 @@ public class MainActivity extends ReactActivity {
     public MainActivityDelegate(ReactActivity activity, String mainComponentName) {
       super(activity, mainComponentName);
     }
-
+    @java.lang.Override
+    protected void onCreate(android.os.Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      SplashScreen.show(getPlainActivity());
+    }
     @Override
     protected ReactRootView createRootView() {
       ReactRootView reactRootView = new ReactRootView(getContext());
