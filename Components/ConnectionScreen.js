@@ -6,7 +6,12 @@ import {Component} from 'react';
 import {Button} from '@rneui/base';
 import {encode as btoa} from 'base-64';
 import {storeData} from './StorageHelper';
-
+import {CardTitle} from '@rneui/base/dist/Card/Card.Title';
+import {Card} from '@rneui/themed';
+import {CardFeaturedTitle} from '@rneui/base/dist/Card/Card.FeaturedTitle';
+import {CardFeaturedSubtitle} from '@rneui/base/dist/Card/Card.FeaturedSubtitle';
+import {LogBox} from 'react-native';
+LogBox.ignoreLogs(['new NativeEventEmitter']);
 // const device = {
 //   id: 'A8:1B:6A:75:96:65',
 //   serviceUUID: 'FFE0',
@@ -16,9 +21,16 @@ export default class ConnectionScreen extends Component {
   constructor(props) {
     super(props);
     this.manager = new BleManager();
-    this.setState({
+    this.state = {
       device: [],
-    });
+      devices: [
+        {
+          id: 'A8:1B:6A:75:96:65',
+          serviceUUID: 'FFE0',
+          characteristicUUID: 'FFE1',
+        },
+      ],
+    };
   }
 
   checkBluetoothState() {
@@ -29,19 +41,6 @@ export default class ConnectionScreen extends Component {
     }, true);
   }
 
-  render() {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Button onPress={() => this.checkBluetoothState()}>Start Search</Button>
-        <Button onPress={() => this.checkBluetoothState()}>
-          Find MLT-BTO5
-        </Button>
-        <Button onPress={() => this.checkBluetoothState()}>
-          Connect to MLT-BTO5
-        </Button>
-      </View>
-    );
-  }
   changeDevice(command) {
     AsyncStorage.getItem('device').then(device => {
       device = JSON.parse(device);
@@ -75,6 +74,9 @@ export default class ConnectionScreen extends Component {
       if (device.name === 'MLT-BTO5') {
         this.manager.stopDeviceScan();
       }
+      if (device.name === 'HD 450BT') {
+        this.manager.stopDeviceScan();
+      }
       return device
         .connect()
         .then(device => {
@@ -92,15 +94,57 @@ export default class ConnectionScreen extends Component {
 
   saveDevice() {
     const device = {
-      id: '',
-      service: '',
-      characteristicUUID: '',
+      id: 'A8:1B:6A:75:96:65',
+      serviceUUID: 'FFE0',
+      characteristicUUID: 'FFE1',
     };
-    device.id = this.state.device.id;
-    device.service = this.state.device.id;
-    device.characteristicUUID = this.state.device.characteristicUUID;
+    // device.id = this.state.device.id;
+    // device.service = this.state.device.id;
+    // device.characteristicUUID = this.state.device.characteristicUUID;
     storeData('device', JSON.stringify(device)).then(
       this.props.navigation.navigate('Device'),
+    );
+  }
+
+  render() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        {this.state.devices.map((u, i) => {
+          return (
+            <Card key={i}>
+              <CardFeaturedTitle
+                style={{
+                  textShadowColor: 'black',
+                  textShadowRadius: 4,
+                  fontSize: 12,
+                }}>
+                {u.id}
+              </CardFeaturedTitle>
+              <CardFeaturedSubtitle
+                style={{
+                  textShadowColor: 'black',
+                  textShadowRadius: 4,
+                  fontSize: 12,
+                }}>
+                {u.serviceUUID}
+              </CardFeaturedSubtitle>
+              <CardFeaturedSubtitle
+                style={{
+                  textShadowColor: 'black',
+                  textShadowRadius: 4,
+                  fontSize: 12,
+                }}>
+                {u.characteristicUUID}
+              </CardFeaturedSubtitle>
+            </Card>
+          );
+        })}
+        <Button onPress={() => this.checkBluetoothState()}>Start Search</Button>
+        <Button onPress={() => this.changeDevice('green')}>GREEN</Button>
+        <Button onPress={() => this.changeDevice('blue')}>BLUE</Button>
+        <Button onPress={() => this.changeDevice('red')}>RED</Button>
+        <Button onPress={() => this.changeDevice('off')}>OFF</Button>
+      </View>
     );
   }
 }

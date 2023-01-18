@@ -35,7 +35,27 @@ export default function DeviceScreen() {
       loadData();
     });
   });
-
+  function changeDevice(command) {
+    console.log('change1');
+    AsyncStorage.getItem('device').then(device => {
+      device = JSON.parse(device);
+      if (device) {
+        this.manager
+          .writeCharacteristicWithResponseForDevice(
+            device.id,
+            device.serviceUUID,
+            device.characteristicUUID,
+            btoa(command),
+          )
+          .then(respone => {
+            console.log('response', respone);
+          })
+          .catch(error => {
+            console.log('error', error);
+          });
+      }
+    });
+  }
   return (
     <View
       style={{
@@ -49,6 +69,7 @@ export default function DeviceScreen() {
         return (
           <TouchableOpacity
             key={i}
+            onLongPress={() => changeDevice(u.command)}
             onPress={() =>
               gotoEdit(u.name, u.color.toString(), u.place, u.command, i)
             }>
@@ -58,11 +79,21 @@ export default function DeviceScreen() {
                 width: Dimensions.get('window').width / 2 - 30,
                 backgroundColor: u.color,
               }}>
-              <Card.FeaturedTitle style={{fontSize: 30}}>
+              <Card.FeaturedTitle
+                style={{
+                  textShadowColor: 'black',
+                  textShadowRadius: 4,
+                  fontSize: 30,
+                }}>
                 {u.name}{' '}
               </Card.FeaturedTitle>
               <Card.FeaturedSubtitle
-                style={{textAlign: 'center', fontSize: 25}}>
+                style={{
+                  textShadowColor: 'black',
+                  textShadowRadius: 4,
+                  textAlign: 'center',
+                  fontSize: 25,
+                }}>
                 {u.place}
               </Card.FeaturedSubtitle>
             </Card>
@@ -78,7 +109,15 @@ export default function DeviceScreen() {
           onPress={() => {
             navigation.navigate('New Device');
           }}>
-          <Text style={{textAlign: 'center', fontSize: 50}}>{'+'}</Text>
+          <Text
+            style={{
+              textShadowColor: 'black',
+              textShadowRadius: 4,
+              textAlign: 'center',
+              fontSize: 50,
+            }}>
+            {'+'}
+          </Text>
         </TouchableOpacity>
       </Card>
     </View>

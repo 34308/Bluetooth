@@ -117,6 +117,8 @@ export default function EditDevice(props) {
 }
 const styles = StyleSheet.create({
   input: {
+    backgroundColor: 'black',
+    color: 'white',
     height: 40,
     margin: 12,
     borderWidth: 1,

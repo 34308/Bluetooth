@@ -94,6 +94,8 @@ export default function NewDevice() {
 }
 const styles = StyleSheet.create({
   input: {
+    backgroundColor: 'black',
+    color: 'white',
     height: 40,
     margin: 12,
     borderWidth: 1,
