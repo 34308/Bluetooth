@@ -8,6 +8,7 @@ import NewDevice from './Components/NewDevice';
 import FlashMessage from 'react-native-flash-message';
 
 import {Icon} from '@rneui/themed';
+import EditDevice from './Components/EditDevice';
 function DeviceIcon() {
   return <Icon name="devices" size={30} color="#900" />;
 }
@@ -51,6 +52,7 @@ export default function App() {
           </RootStack.Group>
           <RootStack.Group screenOptions={{presentation: 'modal'}}>
             <RootStack.Screen name="New Device" component={NewDevice} />
+            <RootStack.Screen name="Edit Device" component={EditDevice} />
           </RootStack.Group>
         </RootStack.Navigator>
       </NavigationContainer>

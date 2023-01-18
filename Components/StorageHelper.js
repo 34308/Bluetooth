@@ -18,6 +18,19 @@ export const storeData = async (value, key) => {
     // saving error
   }
 };
+export const replaceData = async (value, key, index) => {
+  try {
+    let data = await getData(key);
+    if (data == null || data == undefined) {
+      data = [];
+    }
+    data[index] = JSON.parse(value);
+    const newData = JSON.stringify(data);
+    await AsyncStorage.setItem(key, newData);
+  } catch (e) {
+    // saving error
+  }
+};
 export const addToData = async (value, key) => {
   try {
     let data = await getData(key);
@@ -25,6 +38,20 @@ export const addToData = async (value, key) => {
       data = [];
     }
     data.push(JSON.parse(value));
+    const newData = JSON.stringify(data);
+    await AsyncStorage.setItem(key, newData);
+  } catch (e) {
+    // saving error
+  }
+};
+export const removeData = async (index, key) => {
+  console.log();
+  try {
+    let data = await getData(key);
+    if (data == null || data == undefined) {
+      data = [];
+    }
+    data.splice(index, 1);
     const newData = JSON.stringify(data);
     await AsyncStorage.setItem(key, newData);
   } catch (e) {

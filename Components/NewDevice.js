@@ -19,7 +19,6 @@ export default function NewDevice() {
   const [color, setColor] = useState(null);
   async function Accept() {
     if (name !== null && place !== null && command !== null && color !== null) {
-
       await addToData(
         '{ "name":' +
           '"' +
@@ -84,6 +83,7 @@ export default function NewDevice() {
         <ColorPicker
           initialColor="#ee0000"
           onColorChangeComplete={color => onColorChange(color)}
+          onColorChange={color => onColorChange(color)}
           style={{marginBottom: 300, width: Dimensions.get('window').width}}
           thumbStyle={{height: 30, width: 30, borderRadius: 30}}
         />

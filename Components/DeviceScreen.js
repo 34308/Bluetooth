@@ -5,17 +5,29 @@ import {Card} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import {getData} from './StorageHelper';
 import SplashScreen from 'react-native-splash-screen';
+import AsyncStorage from '@react-native-community/async-storage';
+import {encode as btoa} from 'base-64';
 
 export default function DeviceScreen() {
+  function gotoEdit(name, color, place, command, i) {
+    navigation.navigate('Edit Device', {
+      deviceName: name,
+      deviceColor: color,
+      devicePlace: place,
+      deviceCommand: command,
+      deviceIndex: i,
+    });
+  }
   const navigation = useNavigation();
   const [devices, setDevices] = useState([]);
   SplashScreen.hide();
   useEffect(() => {
     async function loadData() {
       getData('key1').then(result => {
-        console.log('result' + JSON.stringify(result));
         if (result) {
           setDevices(result);
+        } else {
+          setDevices([]);
         }
       });
     }
@@ -23,6 +35,7 @@ export default function DeviceScreen() {
       loadData();
     });
   });
+
   return (
     <View
       style={{
@@ -34,18 +47,26 @@ export default function DeviceScreen() {
       }}>
       {devices.map((u, i) => {
         return (
-          <Card
-            containerStyle={{
-              borderRadius: 8,
-              width: Dimensions.get('window').width / 2 - 30,
-              backgroundColor: u.color,
-            }}
-            key={i}>
-            <Card.Title style={{fontSize: 30}}>{u.name} </Card.Title>
-            <Card.FeaturedSubtitle style={{textAlign: 'center', fontSize: 25}}>
-              {u.place}
-            </Card.FeaturedSubtitle>
-          </Card>
+          <TouchableOpacity
+            key={i}
+            onPress={() =>
+              gotoEdit(u.name, u.color.toString(), u.place, u.command, i)
+            }>
+            <Card
+              containerStyle={{
+                borderRadius: 8,
+                width: Dimensions.get('window').width / 2 - 30,
+                backgroundColor: u.color,
+              }}>
+              <Card.FeaturedTitle style={{fontSize: 30}}>
+                {u.name}{' '}
+              </Card.FeaturedTitle>
+              <Card.FeaturedSubtitle
+                style={{textAlign: 'center', fontSize: 25}}>
+                {u.place}
+              </Card.FeaturedSubtitle>
+            </Card>
+          </TouchableOpacity>
         );
       })}
       <Card
